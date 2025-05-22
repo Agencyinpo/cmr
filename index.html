@@ -1,0 +1,58 @@
+<h1>Простая CRM-система</h1>
+
+<label>Имя клиента:</label><br>
+<input type="text" id="name"><br>
+
+<label>Телефон:</label><br>
+<input type="text" id="phone"><br>
+
+<label>Статус:</label><br>
+<select id="status">
+  <option value="new">Новая заявка</option>
+  <option value="in_progress">В работе</option>
+  <option value="done">Выполнено</option>
+</select><br>
+
+<button onclick="addClient()">Добавить клиента</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>Имя</th>
+      <th>Телефон</th>
+      <th>Статус</th>
+    </tr>
+  </thead>
+  <tbody id="clientList"></tbody>
+</table>
+
+<script>
+  const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+
+  function renderClients() {
+    const list = document.getElementById('clientList');
+    list.innerHTML = '';
+    clients.forEach(client => {
+      const row = `<tr><td>${client.name}</td><td>${client.phone}</td><td>${client.status}</td></tr>`;
+      list.innerHTML += row;
+    });
+  }
+
+  function addClient() {
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const status = document.getElementById('status').value;
+
+    if (name && phone) {
+      clients.push({ name, phone, status });
+      localStorage.setItem('clients', JSON.stringify(clients));
+      renderClients();
+      document.getElementById('name').value = '';
+      document.getElementById('phone').value = '';
+    } else {
+      alert('Пожалуйста, заполните все поля');
+    }
+  }
+
+  renderClients();
+</script>
